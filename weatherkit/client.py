@@ -16,6 +16,7 @@
 import requests
 from weatherkit.token import generate_token
 from time import time
+from datetime import datetime
 
 
 class TokenExpiredError(Exception):
@@ -46,9 +47,13 @@ class WKClient:
         headers = {
             "Authorization": f"Bearer {self.token.token}"
         }
+        #format: 2022-12-15T23:46:03Z
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%dT%H:%M:%SZ") 
         params = {
             "timezone": timezone,
-            "dataSets": ",".join(dataSets)
+            "dataSets": ",".join(dataSets),
+            "hourlyStart": now
         }
         response = requests.get(url, headers=headers, params=params)
 
